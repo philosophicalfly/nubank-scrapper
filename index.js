@@ -125,13 +125,109 @@ const PASSWD = process.env.NUPASSWD;
         return profile;
     }
     
+    async function getCharges(){
+        await page.goto('https://app.nubank.com.br/#/bills')
+        await page.waitForSelector('.md-tab-content');
+        let charges = await page.evaluate(() => {
+            let retObj = {};
+            const months = document.querySelectorAll('div[role="tabpanel"]');
+            months.forEach(month => {
+                const monthId = month.id.substr(month.id.length - 7);
+                retObj[monthId]=[];
+                const charges = month.querySelectorAll('.row .charges .charges-list .charge');
+                charges.forEach(charge => {
+                    const date = charge.querySelector('.charge .time .cell .date').innerText
+                    const description = charge.querySelector('.charge-data .description').innerText;
+                    const amount = charge.querySelector('.charge-data .amount').innerText;
+                    retObj[monthId].push({
+                        date,
+                        description,
+                        amount
+                    });   
+                });
+            });
+            return retObj;
+        });
+        // console.log('getCharges -> charges', charges);
+        return charges;
+    }
+    
+    async function getTransactions(){
+        await page.goto('https://app.nubank.com.br/#/transactions')
+        await openSheet(page, '#timeChart .header');
+        await dragAndDrop(page, '.resize.w', '.axis.y');
+        await dragAndDrop(page, '.resize.e', '.feed');
+        await (new Promise(r => setTimeout(r, 1000)))
+        
+        const transactions = await page.evaluate(() => {
+            const summaries = document.querySelectorAll('.summary .number-display');
+            const purchases = summaries[0].innerText;
+            const expenses = summaries[1].innerText;
+            let retObj = {
+                purchases,
+                expenses,
+                feed: []
+            };
+            
+            const cards = document.querySelectorAll('#feedTable .event-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.title') ? card.querySelector('.title').innerText : ''
+                const description = card.querySelector('.description') ? card.querySelector('.description').innerText : ''
+                const amount = card.querySelector('.amount') ? card.querySelector('.amount').innerText : ''
+                const date = card.querySelector('.time') ? card.querySelector('.time').innerText : ''
+                
+                retObj.feed.push({
+                    title,
+                    description,
+                    amount,
+                    date
+                });                   
+            });
+            return retObj;
+        });
+                
+        // console.log('getTransactions -> transactions', transactions);
+        return transactions;
+    }
+    
+    async function dragAndDrop(page, originSelector, destinationSelector) {
+        await page.waitFor(originSelector)
+        await page.waitFor(destinationSelector)
+        const origin = await page.$(originSelector)
+        const destination = await page.$(destinationSelector)
+        const ob = await origin.boundingBox()
+        const db = await destination.boundingBox()
+        
+        // console.log(`Dragging from ${ob.x + ob.width / 2}, ${ob.y + ob.height / 2}`)
+        await page.mouse.move(ob.x + ob.width / 2, ob.y + ob.height / 2)
+        await page.mouse.down()
+        // console.log(`Dropping at   ${db.x + db.width / 2}, ${db.y + db.height / 2}`)
+        await page.mouse.move(db.x + db.width / 2, db.y + db.height / 2)
+        await page.mouse.up()
+    }
+    
+    async function openSheet(page, originSelector) {
+        await page.waitFor(originSelector)
+        const origin = await page.$(originSelector)
+        const ob = await origin.boundingBox()
+        
+        // console.log(`Dragging from ${ob.x + ob.width / 2}, ${ob.y + ob.height / 2}`)
+        await page.mouse.move(ob.x + ob.width / 2, ob.y + ob.height / 2)
+        await page.mouse.down()
+        await page.mouse.up()
+    }
+    
     
     await login();
-    // await openAllTabs();
-    // await (new Promise(r => setTimeout(r, 1000)))
-    // const summaries = await getSummaries();
-    // const charges = await getCharges();
-    // const profile = await getProfile();
+    await openAllTabs();
+    await (new Promise(r => setTimeout(r, 1000)))
+    const summaries = await getSummaries();
+    const charges = await getCharges();
+    const profile = await getProfile();
+    const transactions = await getTransactions();
+
+    await browser.close();
     return 0;
-    
+
 })();
