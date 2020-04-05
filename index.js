@@ -17,7 +17,7 @@ const PASSWD = process.env.NUPASSWD;
         const imgAll = await page.$$eval('img[alt="Scan me!"]', images => {
             return images.map((image)=>image.src)
         });
-        await console.log(imgAll[0]);
+        // await console.log(imgAll[0]);
         await page.waitForSelector('a[href="#bills"]');
         return 0;
     }
@@ -186,7 +186,7 @@ const PASSWD = process.env.NUPASSWD;
             });
             return retObj;
         });
-                
+        
         // console.log('getTransactions -> transactions', transactions);
         return transactions;
     }
@@ -198,11 +198,8 @@ const PASSWD = process.env.NUPASSWD;
         const destination = await page.$(destinationSelector)
         const ob = await origin.boundingBox()
         const db = await destination.boundingBox()
-        
-        // console.log(`Dragging from ${ob.x + ob.width / 2}, ${ob.y + ob.height / 2}`)
         await page.mouse.move(ob.x + ob.width / 2, ob.y + ob.height / 2)
         await page.mouse.down()
-        // console.log(`Dropping at   ${db.x + db.width / 2}, ${db.y + db.height / 2}`)
         await page.mouse.move(db.x + db.width / 2, db.y + db.height / 2)
         await page.mouse.up()
     }
@@ -211,8 +208,6 @@ const PASSWD = process.env.NUPASSWD;
         await page.waitFor(originSelector)
         const origin = await page.$(originSelector)
         const ob = await origin.boundingBox()
-        
-        // console.log(`Dragging from ${ob.x + ob.width / 2}, ${ob.y + ob.height / 2}`)
         await page.mouse.move(ob.x + ob.width / 2, ob.y + ob.height / 2)
         await page.mouse.down()
         await page.mouse.up()
