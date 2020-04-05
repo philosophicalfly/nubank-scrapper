@@ -213,16 +213,30 @@ const PASSWD = process.env.NUPASSWD;
         await page.mouse.up()
     }
     
+    async function logout(){
+        try {
+            await page.goto('https://app.nubank.com.br/#/profile', { waitUntil: 'networkidle0' })
+            await page.evaluate(() => {
+                document.querySelector('.logout').click() 
+            });
+            await page.waitForSelector('.toolbar.login');
+            // await console.log('Logged out');
+            return 0;
+        } catch (error) {
+            return -1   
+        }
+    }
+    
+    
     
     await login();
-    await openAllTabs();
-    await (new Promise(r => setTimeout(r, 1000)))
-    const summaries = await getSummaries();
-    const charges = await getCharges();
-    const profile = await getProfile();
-    const transactions = await getTransactions();
-
+    // await openAllTabs();
+    // await (new Promise(r => setTimeout(r, 1000)))
+    // const summaries = await getSummaries();
+    // const charges = await getCharges();
+    // const profile = await getProfile();
+    // const transactions = await getTransactions();
+    await logout();
     await browser.close();
     return 0;
-
 })();
