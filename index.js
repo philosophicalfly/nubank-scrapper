@@ -17,7 +17,7 @@ const PASSWD = process.env.NUPASSWD;
         const imgAll = await page.$$eval('img[alt="Scan me!"]', images => {
             return images.map((image)=>image.src)
         });
-        //await console.log(imgAll[0]);
+        await console.log(imgAll[0]);
         await page.waitForSelector('a[href="#bills"]');
         return 0;
     }
@@ -40,7 +40,7 @@ const PASSWD = process.env.NUPASSWD;
                 await page.$eval(`#${tab}`, tab => tab.click());
             }, i * 50);
         });
-        console.log('openAllTabs -> tabs', tabs);
+        // console.log('openAllTabs -> tabs', tabs);
         return tabs;
     }    
     
@@ -65,7 +65,7 @@ const PASSWD = process.env.NUPASSWD;
             });
             return retObj;
         });
-        console.log('getSummaries -> summaries', summaries);
+        // console.log('getSummaries -> summaries', summaries);
         return summaries;
     }
     
@@ -92,7 +92,7 @@ const PASSWD = process.env.NUPASSWD;
             });
             return retObj;
         });
-        console.log('getCharges -> charges', charges);
+        // console.log('getCharges -> charges', charges);
         return charges;
     }
     
@@ -121,7 +121,7 @@ const PASSWD = process.env.NUPASSWD;
             };
             return retObj;
         });
-        console.log('getProfile -> profile', profile);
+        // console.log('getProfile -> profile', profile);
         return profile;
     }
     
