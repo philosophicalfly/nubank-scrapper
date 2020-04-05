@@ -1,6 +1,8 @@
 const puppeteer = require('puppeteer');
-const LOGIN = '';
-const PASSWD = '';
+require('dotenv').config();
+
+const LOGIN = process.env.NULOGIN;
+const PASSWD = process.env.NUPASSWD;
 
 (async () => {
     const browser = await puppeteer.launch({headless: false, defaultViewport: null});
@@ -97,10 +99,10 @@ const PASSWD = '';
     }
     
     await login();
-    await openAllTabs();
-    await (new Promise(r => setTimeout(r, 1000)))
-    const summaries = await getSummaries();
-    const charges = await getCharges();
+    // await openAllTabs();
+    // await (new Promise(r => setTimeout(r, 1000)))
+    // const summaries = await getSummaries();
+    // const charges = await getCharges();
     return 0;
     
 })();
