@@ -69,8 +69,6 @@ const PASSWD = process.env.NUPASSWD;
         return summaries;
     }
     
-    
-    
     async function getCharges(){
         await page.goto('https://app.nubank.com.br/#/bills')
         await page.waitForSelector('.md-tab-content');
@@ -98,11 +96,42 @@ const PASSWD = process.env.NUPASSWD;
         return charges;
     }
     
+    async function getProfile(){
+        await page.goto('https://app.nubank.com.br/#/profile', { waitUntil: 'networkidle0' })
+        await page.waitForSelector('.card');
+        const profile = await page.evaluate(() => {
+            const name = document.querySelector('.card .name').innerText
+            const email = document.querySelector('#email').value;
+            const phone = document.querySelector('#phone').value;
+            const number = document.querySelector('.card .number').innerText;
+            const usedCredit = document.querySelector('.limitbar .open .amount').innerText
+            const availableCredit = document.querySelector('.limitbar .available .amount').innerText
+            const summary = document.querySelectorAll('.card-summary .value');
+            const totalCredit = summary[0].innerText;
+            const dueDay = summary[1].innerText;
+            const retObj = {
+                name,
+                email,
+                phone,
+                number,
+                usedCredit,
+                availableCredit,
+                totalCredit,
+                dueDay
+            };
+            return retObj;
+        });
+        console.log('getProfile -> profile', profile);
+        return profile;
+    }
+    
+    
     await login();
     // await openAllTabs();
     // await (new Promise(r => setTimeout(r, 1000)))
     // const summaries = await getSummaries();
     // const charges = await getCharges();
+    // const profile = await getProfile();
     return 0;
     
 })();
