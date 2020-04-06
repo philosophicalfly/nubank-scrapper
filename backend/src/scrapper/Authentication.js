@@ -1,10 +1,6 @@
 const puppeteer = require('puppeteer');
 const {getBrowser, getPage} = require('./Utils');
 
-require('dotenv').config();
-// const LOGIN = process.env.NULOGIN;
-// const PASSWD = process.env.NUPASSWD;
-
 async function getQrCode(context){
     context.browser = context.browser || await getBrowser(context)
     page = context.page || await getPage(context)
