@@ -2,25 +2,36 @@ const puppeteer = require('puppeteer');
 const {getBrowser, getPage} = require('./Utils');
 
 require('dotenv').config();
-const LOGIN = process.env.NULOGIN;
-const PASSWD = process.env.NUPASSWD;
+// const LOGIN = process.env.NULOGIN;
+// const PASSWD = process.env.NUPASSWD;
 
-async function login(context){
+async function getQrCode(context){
     context.browser = context.browser || await getBrowser(context)
     page = context.page || await getPage(context)
     await page.goto('https://app.nubank.com.br/#/login', { waitUntil: 'networkidle0' });
-    await page.type('#username', LOGIN);
-    await page.type('input[type="password"]', PASSWD);
+    await page.type('#username', context.login);
+    await page.type('input[type="password"]', context.passwd);
     await page.click('button[class="nu-button stroke login-btn ng-binding"]');
     await page.waitForSelector('img[alt="Scan me!"]');
     const imgAll = await page.$$eval('img[alt="Scan me!"]', images => {
         return images.map((image)=>image.src)
     });
-    // await console.log(imgAll[0]);
-    await page.waitForSelector('a[href="#bills"]');
+    const qrCode = imgAll[0] || '';
+
+    context.page = page
+    context.logged = false;
+    context.data = qrCode;
+    return context;
+}
+
+async function watchLogin(context){
+    page = context.page || await getPage(context)
+    await page.waitForSelector('.nu-sprite-logo');
+
     context.page = page
     context.logged = true;
-    return context;
+    context.data = {login: true};
+    return context
 }
 
 async function logout(context){
@@ -32,9 +43,12 @@ async function logout(context){
         });
         await page.waitForSelector('.toolbar.login');
         // await console.log('Logged out');
-        context.logged = false;
-        context.data = false;
         await context.browser.close();
+
+        context.logged = false;
+        context.page = false;
+        context.browser = false;
+        context.data = {login: false};
         return context;
     } catch (error) {
         return -1   
@@ -42,6 +56,7 @@ async function logout(context){
 }
 
 module.exports = {
-    login,
+    getQrCode,
+    watchLogin,
     logout
 }

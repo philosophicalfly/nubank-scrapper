@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 
 async function getBrowser(context){
-    const browser = await puppeteer.launch({headless: false, defaultViewport: null});
+    const browser = await puppeteer.launch({headless: true, defaultViewport: null});
     return browser;
 }
 
