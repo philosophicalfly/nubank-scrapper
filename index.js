@@ -1,26 +1,18 @@
-const puppeteer = require('puppeteer');
-require('dotenv').config();
-const {getProfile} = require('./scrapper/Profile');
-const {getTransactions} = require('./scrapper/Transactions');
-const {getSummaries} = require('./scrapper/Summaries');
-const {getCharges} = require('./scrapper/Charges');
-const {login, logout} = require('./scrapper/Authentication');
-const Utils = require('./scrapper/Utils');
+const express = require('express');
+const routes = require('./src/routes');
+const cors = require('cors');
+const app = express();
 
-(async () => {
+app.use(cors(
+  // {
+  //   origin: "http://localhost:3000",
+  //   credentials: true
+  // }
+));
+app.use(express.json())
+app.use(routes);
 
-    let context = {
-        page: false,
-        browser: false,
-        logged: false,
-        data: false
-    };
-
-    context = await login(context);
-    context = await getSummaries(context), console.log(context.data);
-    context = await getCharges(context), console.log(context.data);
-    context = await getProfile(context), console.log(context.data);
-    context = await getTransactions(context), console.log(context.data);
-    context = await logout(context);
-    return 0;
-})();
+const PORT = process.env.PORT || 3030;
+app.listen(PORT, () => {
+    console.log(`Our app is running on port ${ PORT }`);
+});
