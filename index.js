@@ -40,7 +40,7 @@ const PASSWD = process.env.NUPASSWD;
                 await page.$eval(`#${tab}`, tab => tab.click());
             }, i * 50);
         });
-        // console.log('openAllTabs -> tabs', tabs);
+        console.log('openAllTabs -> tabs', tabs);
         return tabs;
     }    
     
@@ -51,12 +51,12 @@ const PASSWD = process.env.NUPASSWD;
             let retObj = {};
             const months = document.querySelectorAll('div[role="tabpanel"]');
             months.forEach(month => {
-                const monthId = month.id.substr(month.id.length - 7);
+                const monthId = month.id ? month.id.substr(month.id.length - 7) : '';
                 retObj[monthId]={};
                 const summaries = month.querySelectorAll('.row .summary .amount-due .cell');
                 summaries.forEach(summary => {
-                    const amount = summary.querySelector('.amount').innerText
-                    const dueDate = summary.querySelector('.due .date').innerText;
+                    const amount = summary.querySelector('.amount') ? summary.querySelector('.amount').innerText : '';
+                    const dueDate = summary.querySelector('.due .date') ? summary.querySelector('.due .date').innerText : '';
                     retObj[monthId]={
                         amount,
                         dueDate,
@@ -65,50 +65,23 @@ const PASSWD = process.env.NUPASSWD;
             });
             return retObj;
         });
-        // console.log('getSummaries -> summaries', summaries);
+        console.log('getSummaries -> summaries', summaries);
         return summaries;
-    }
-    
-    async function getCharges(){
-        await page.goto('https://app.nubank.com.br/#/bills')
-        await page.waitForSelector('.md-tab-content');
-        let charges = await page.evaluate(() => {
-            let retObj = {};
-            const months = document.querySelectorAll('div[role="tabpanel"]');
-            months.forEach(month => {
-                const monthId = month.id.substr(month.id.length - 7);
-                retObj[monthId]=[];
-                const charges = month.querySelectorAll('.row .charges .charges-list .charge');
-                charges.forEach(charge => {
-                    const date = charge.querySelector('.charge .time .cell .date').innerText
-                    const description = charge.querySelector('.charge-data .description').innerText;
-                    const amount = charge.querySelector('.charge-data .amount').innerText;
-                    retObj[monthId].push({
-                        date,
-                        description,
-                        amount
-                    });   
-                });
-            });
-            return retObj;
-        });
-        // console.log('getCharges -> charges', charges);
-        return charges;
     }
     
     async function getProfile(){
         await page.goto('https://app.nubank.com.br/#/profile', { waitUntil: 'networkidle0' })
         await page.waitForSelector('.card');
         const profile = await page.evaluate(() => {
-            const name = document.querySelector('.card .name').innerText
-            const email = document.querySelector('#email').value;
-            const phone = document.querySelector('#phone').value;
-            const number = document.querySelector('.card .number').innerText;
-            const usedCredit = document.querySelector('.limitbar .open .amount').innerText
-            const availableCredit = document.querySelector('.limitbar .available .amount').innerText
+            const name = document.querySelector('.card .name') ? document.querySelector('.card .name').innerText : ''
+            const email = document.querySelector('#email') ? document.querySelector('#email').value : '';
+            const phone = document.querySelector('#phone') ? document.querySelector('#phone').value : '';
+            const number = document.querySelector('.card .number') ? document.querySelector('.card .number').innerText : '';
+            const usedCredit = document.querySelector('.limitbar .open .amount') ? document.querySelector('.limitbar .open .amount').innerText : '';
+            const availableCredit = document.querySelector('.limitbar .available .amount') ? document.querySelector('.limitbar .available .amount').innerText : '';
             const summary = document.querySelectorAll('.card-summary .value');
-            const totalCredit = summary[0].innerText;
-            const dueDay = summary[1].innerText;
+            const totalCredit = summary[0] ? summary[0].innerText : '';
+            const dueDay = summary[1] ? summary[1].innerText : '';
             const retObj = {
                 name,
                 email,
@@ -121,7 +94,7 @@ const PASSWD = process.env.NUPASSWD;
             };
             return retObj;
         });
-        // console.log('getProfile -> profile', profile);
+        console.log('getProfile -> profile', profile);
         return profile;
     }
     
@@ -132,13 +105,13 @@ const PASSWD = process.env.NUPASSWD;
             let retObj = {};
             const months = document.querySelectorAll('div[role="tabpanel"]');
             months.forEach(month => {
-                const monthId = month.id.substr(month.id.length - 7);
+                const monthId = month.id ? month.id.substr(month.id.length - 7) : '';
                 retObj[monthId]=[];
                 const charges = month.querySelectorAll('.row .charges .charges-list .charge');
                 charges.forEach(charge => {
-                    const date = charge.querySelector('.charge .time .cell .date').innerText
-                    const description = charge.querySelector('.charge-data .description').innerText;
-                    const amount = charge.querySelector('.charge-data .amount').innerText;
+                    const date = charge.querySelector('.charge .time .cell .date') ? charge.querySelector('.charge .time .cell .date').innerText : '';
+                    const description = charge.querySelector('.charge-data .description') ? charge.querySelector('.charge-data .description').innerText : '';
+                    const amount = charge.querySelector('.charge-data .amount') ? charge.querySelector('.charge-data .amount').innerText : '';
                     retObj[monthId].push({
                         date,
                         description,
@@ -148,21 +121,21 @@ const PASSWD = process.env.NUPASSWD;
             });
             return retObj;
         });
-        // console.log('getCharges -> charges', charges);
+        console.log('getCharges -> charges', charges);
         return charges;
     }
     
     async function getTransactions(){
         await page.goto('https://app.nubank.com.br/#/transactions')
-        await openSheet(page, '#timeChart .header');
+        await prudentClick(page, '#timeChart .header');
         await dragAndDrop(page, '.resize.w', '.axis.y');
         await dragAndDrop(page, '.resize.e', '.feed');
         await (new Promise(r => setTimeout(r, 1000)))
         
         const transactions = await page.evaluate(() => {
             const summaries = document.querySelectorAll('.summary .number-display');
-            const purchases = summaries[0].innerText;
-            const expenses = summaries[1].innerText;
+            const purchases = summaries[0] ? summaries[0].innerText : '';
+            const expenses = summaries[1] ? summaries[1].innerText : '';
             let retObj = {
                 purchases,
                 expenses,
@@ -187,7 +160,7 @@ const PASSWD = process.env.NUPASSWD;
             return retObj;
         });
         
-        // console.log('getTransactions -> transactions', transactions);
+        console.log('getTransactions -> transactions', transactions);
         return transactions;
     }
     
@@ -204,7 +177,7 @@ const PASSWD = process.env.NUPASSWD;
         await page.mouse.up()
     }
     
-    async function openSheet(page, originSelector) {
+    async function prudentClick(page, originSelector) {
         await page.waitFor(originSelector)
         const origin = await page.$(originSelector)
         const ob = await origin.boundingBox()
@@ -227,16 +200,14 @@ const PASSWD = process.env.NUPASSWD;
         }
     }
     
-    
-    
     await login();
-    // await openAllTabs();
-    // await (new Promise(r => setTimeout(r, 1000)))
-    // const summaries = await getSummaries();
-    // const charges = await getCharges();
-    // const profile = await getProfile();
-    // const transactions = await getTransactions();
+    await openAllTabs();
+    await (new Promise(r => setTimeout(r, 1500)))
+    const summaries = await getSummaries();
+    const charges = await getCharges();
+    const profile = await getProfile();
+    const transactions = await getTransactions();
     await logout();
-    await browser.close();
+    // await browser.close();
     return 0;
 })();
