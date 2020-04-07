@@ -1,13 +1,10 @@
 const puppeteer = require('puppeteer');
-const {getPage, getTabNames} = require('./Utils');
+const {getPage, loadAllTabs} = require('./Utils');
 
 async function getCharges(context){
     page = context.page || await getPage(context);
-    context = await getTabNames(context);
+    context = await loadAllTabs(context);
     const tabNames = context.data;
-
-    await page.goto('https://app.nubank.com.br/#/bills')
-    await page.waitForSelector('.md-tab-content');
     let charges = await page.evaluate(() => {
         let retObj = {};
         const months = document.querySelectorAll('div[role="tabpanel"]');
@@ -29,7 +26,7 @@ async function getCharges(context){
         return retObj;
     });
     
-    // console.log('getCharges -> charges', charges);
+    console.log('getCharges -> charges', charges);
     context.data = {
         tabNames,
         charges

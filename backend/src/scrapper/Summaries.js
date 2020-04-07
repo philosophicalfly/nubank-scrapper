@@ -1,19 +1,5 @@
 const puppeteer = require('puppeteer');
-const {getPage, getTabNames} = require('./Utils');
-
-async function loadAllTabs(context){
-    page = context.page || await getPage(context);
-    context = await getTabNames(context);
-    const tabs = context.data;
-
-    Object.keys(tabs).forEach((tab, i) => {
-        setTimeout(async () => {
-            await page.$eval(`#${tab}`, tab => tab.click());
-        }, i * 50);
-    });
-    // console.log('openAllTabs -> tabs', tabs);
-    return context;
-}    
+const {getPage, loadAllTabs} = require('./Utils');
 
 async function getSummaries(context){
     context = await loadAllTabs(context);

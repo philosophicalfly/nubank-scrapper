@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 
 async function getBrowser(context){
-    const browser = await puppeteer.launch({headless: true, defaultViewport: null});
+    const browser = await puppeteer.launch({headless: true, defaultViewport: null, args : ['--window-size=1920,1080'],});
     return browser;
 }
 
@@ -49,10 +49,22 @@ async function getTabNames(context){
     return context;
 }
 
+async function loadAllTabs(context){
+    page = context.page || await getPage(context);
+    context = await getTabNames(context);
+    const tabs = Object.keys(context.data);
+    await (new Promise(r => setTimeout(r, 2000)))
+    for (const t of tabs) {
+        await page.$eval(`#${t}`, tab => tab.click());
+    }
+    return context;
+}    
+
+
 module.exports = {
     getBrowser,
     getPage,
     dragAndDrop, 
     prudentClick, 
-    getTabNames
+    loadAllTabs
 }
