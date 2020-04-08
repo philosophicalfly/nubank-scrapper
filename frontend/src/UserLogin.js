@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Link, useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
+import crypto from 'crypto';
 
 import {
   Button,
@@ -27,9 +28,17 @@ export default function SignInSide() {
 
   async function getQrCode(event) {
     event.preventDefault();
+
+    function encrypt(text){
+      var cipher = crypto.createCipher('aes-256-cbc','nu5cr4pp3r')
+      var crypted = cipher.update(text,'utf8','hex')
+      crypted += cipher.final('hex');
+      return crypted;
+    }
+    
     const data = {
-      login: cpf,
-      passwd
+      login: encrypt(cpf),
+      passwd: encrypt(passwd)
     };
     try {
       setQrCodeState('waiting');

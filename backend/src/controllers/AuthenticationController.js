@@ -1,10 +1,14 @@
 const AuthenticationScrapper = require('../scrapper/Authentication');
+const {decrypt} = require('../scrapper/Utils')
 let {context} = require('./SessionController');
 
-function getQrCode(req, res) {
+async function getQrCode(req, res) {
     const body = req.body;
-    context.login = body.login;
-    context.passwd = body.passwd;
+    context.login = await decrypt(body.login);
+    console.log('getQrCode -> context.login', context.login);
+    context.passwd = await decrypt(body.passwd);
+    console.log('getQrCode -> context.passwd', context.passwd);
+
     AuthenticationScrapper.getQrCode(context).then(response => {
         context = response;
         return res.json(context.data);

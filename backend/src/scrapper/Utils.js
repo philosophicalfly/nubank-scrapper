@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const crypto = require('crypto');
 
 async function getBrowser(context){
     const browser = await puppeteer.launch({headless: true, defaultViewport: null, args : ['--window-size=1920,1080'],});
@@ -61,11 +62,19 @@ async function loadAllTabs(context){
     return context;
 }    
 
+async function decrypt(text){
+    var decipher = crypto.createDecipher('aes-256-cbc','nu5cr4pp3r')
+    var dec = decipher.update(text,'hex','utf8')
+    dec += decipher.final('utf8');
+    return dec;
+}
+
 
 module.exports = {
     getBrowser,
     getPage,
     dragAndDrop, 
     prudentClick, 
-    loadAllTabs
+    loadAllTabs,
+    decrypt
 }
