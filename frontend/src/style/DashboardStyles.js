@@ -68,6 +68,9 @@ const useStyles = makeStyles((theme) => ({
   cardGrid: {
     padding: theme.spacing(4, 4, 4, 4)
   },
+  spaceLeft: {
+    marginLeft: theme.spacing(2)
+  },
   loadingContainer: {
     display: 'flex',
     flexDirection: 'row',

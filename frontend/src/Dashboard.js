@@ -3,6 +3,7 @@ import {useHistory} from 'react-router-dom';
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CachedIcon from '@material-ui/icons/Cached';
+import SaveIcon from '@material-ui/icons/Save';
 import loading from './img/general/loading.gif';
 
 import {
@@ -32,6 +33,7 @@ export default function Dashboard() {
   const [tabNames, setTabNames] = useState(false);
   const [charges, setCharges] = useState(false);
   const [summaries, setSummaries] = useState(false);
+  const [saveButton, setSaveButton] = useState(true);
 
   useEffect(() => {
     showProfile();
@@ -54,6 +56,24 @@ export default function Dashboard() {
     setDataToShow('profile');
   }
 
+  async function saveProfile() {
+    setSaveButton(false);
+    if(!profile){
+      alert("Error, try again later...");
+    }else{
+      try {
+        await api.post('profile', profile).then(response => {
+            if (response) {
+              alert("Saved profile to MongoDB");
+            }
+        })    
+      } catch (e) {
+        alert("Error, try again later...");
+      }
+      setSaveButton(true);
+    }
+  }
+
   async function showTransactions(refetch) {
     if(!transactions|| refetch){
     setDataToShow('loading');
@@ -70,6 +90,25 @@ export default function Dashboard() {
     }
     setDataToShow('transactions');
   }
+
+  async function saveTransactions() {
+    setSaveButton(false);
+    if(!transactions){
+      alert("Error, tryadasdfasdfasdfasdf again later...");
+    }else{
+      try {
+        await api.post('transactions', transactions).then(response => {
+            if (response) {
+              alert("Saved transactions to MongoDB");
+            }
+        })    
+      } catch (e) {
+        alert("Error, try agaiqqqqqqqqqn later...");
+      }
+      setSaveButton(true);
+    }
+  }
+
 
   async function showCharges(refetch) {
     if(!charges || refetch){
@@ -88,6 +127,24 @@ export default function Dashboard() {
       }
     }
     setDataToShow('charges');
+  }
+
+  async function saveCharges() {
+    setSaveButton(false);
+    if(!charges){
+      alert("Error, try again later...");
+    }else{
+      try {
+        await api.post('charges', {tabNames, charges}).then(response => {
+            if (response) {
+              alert("Saved charges to MongoDB");
+            }
+        })    
+      } catch (e) {
+        alert("Error, try again later...");
+      }
+      setSaveButton(true);
+    }
   }
 
   async function showSummaries(refetch) {
@@ -109,6 +166,25 @@ export default function Dashboard() {
     }
     setDataToShow('summaries');
   }
+
+  async function saveSummaries() {
+    setSaveButton(false);
+    if(!summaries){
+      alert("Error, try again later...");
+    }else{
+      try {
+        await api.post('summaries', {tabNames, summaries}).then(response => {
+            if (response) {
+              alert("Saved summaries to MongoDB");
+            }
+        })    
+      } catch (e) {
+        alert("Error, try again later...");
+      }
+      setSaveButton(true);
+    }
+  }
+
 
   async function logout() {
     try {
@@ -158,11 +234,14 @@ export default function Dashboard() {
         </Container>
         )}
 
-        {dataToShow === 'profile' && (
+        {profile && dataToShow === 'profile' && (
         <Container className={classes.cardGrid} maxWidth="md">
         <Grid container spacing={2} justify="space-between">
             <Grid item><Typography component="h4" variant="h4">Profile</Typography></Grid>
-            <Grid item><Button variant="contained" color="primary" onClick={() => showProfile(true)}><CachedIcon className={classes.icon}/></Button></Grid>
+            <Grid item>
+            {saveButton && (<Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => saveProfile()}><SaveIcon className={classes.icon}/></Button>)}
+            <Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => showProfile(true)}><CachedIcon className={classes.icon}/></Button>
+            </Grid>
         </Grid>
           <Typography color="textSecondary">Email: {profile.email}</Typography>
           <Typography color="textSecondary">Phone: {profile.phone}</Typography>
@@ -174,11 +253,14 @@ export default function Dashboard() {
         </Container>
         )}
 
-        {dataToShow === 'transactions' && (
+        {transactions && dataToShow === 'transactions' && (
         <Container className={classes.cardGrid} maxWidth="md">
         <Grid container spacing={2} justify="space-between">
             <Grid item><Typography component="h4" variant="h4">Transactions</Typography></Grid>
-            <Grid item><Button variant="contained" color="primary" onClick={() => showTransactions(true)}><CachedIcon className={classes.icon}/></Button></Grid>
+            <Grid item>
+            {saveButton && (<Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => saveTransactions()}><SaveIcon className={classes.icon}/></Button>)}
+            <Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => showTransactions(true)}><CachedIcon className={classes.icon}/></Button>
+            </Grid>
         </Grid>
         <Typography component="h5" variant="h5">Total Purchases: {transactions.purchases}</Typography>
         <Typography component="h5" variant="h5">Total Expenses: R${transactions.expenses}</Typography>
@@ -208,11 +290,14 @@ export default function Dashboard() {
         </Container>
         )}
 
-        {dataToShow === 'charges' && (
+        {charges && dataToShow === 'charges' && (
         <Container className={classes.cardGrid} maxWidth="md">
         <Grid container spacing={2} justify="space-between">
             <Grid item><Typography component="h4" variant="h4">Charges</Typography></Grid>
-            <Grid item><Button variant="contained" color="primary" onClick={() => showCharges(true)}><CachedIcon className={classes.icon}/></Button></Grid>
+            <Grid item>
+            {saveButton && (<Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => saveCharges()}><SaveIcon className={classes.icon}/></Button>)}
+            <Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => showCharges(true)}><CachedIcon className={classes.icon}/></Button>
+            </Grid>
         </Grid>
          {Object.entries(tabNames).map(([v, value]) => (
           <Grid container="container" spacing={4} key={v}>
@@ -241,11 +326,14 @@ export default function Dashboard() {
         )}
 
 
-        {dataToShow === 'summaries' && (
+        {summaries && dataToShow === 'summaries' && (
         <Container className={classes.cardGrid} maxWidth="md">
         <Grid container spacing={2} justify="space-between">
             <Grid item><Typography component="h4" variant="h4">Summaries</Typography></Grid>
-            <Grid item><Button variant="contained" color="primary" onClick={() => showSummaries(true)}><CachedIcon className={classes.icon}/></Button></Grid>
+            <Grid item>
+            {saveButton && (<Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => saveSummaries()}><SaveIcon className={classes.icon}/></Button>)}
+            <Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => showSummaries(true)}><CachedIcon className={classes.icon}/></Button>
+            </Grid>
         </Grid>
          {Object.entries(tabNames).map(([v, value]) => (
           <Grid container="container" spacing={4} key={v}>
