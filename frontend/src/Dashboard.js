@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Link, useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CachedIcon from '@material-ui/icons/Cached';
@@ -113,7 +113,7 @@ export default function Dashboard() {
   async function logout() {
     try {
         const response = await api.post('logout');
-        if (response && response.data && response.data.login == false) {
+        if (response && response.data && response.data.login === false) {
           history.push('/');
         }
       } catch (e) {

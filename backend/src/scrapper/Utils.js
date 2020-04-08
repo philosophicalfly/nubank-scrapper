@@ -53,9 +53,10 @@ async function loadAllTabs(context){
     page = context.page || await getPage(context);
     context = await getTabNames(context);
     const tabs = Object.keys(context.data);
-    await (new Promise(r => setTimeout(r, 2000)))
+    await (new Promise(r => setTimeout(r, 5000)))
     for (const t of tabs) {
         await page.$eval(`#${t}`, tab => tab.click());
+        // await (new Promise(r => setTimeout(r, 50)))
     }
     return context;
 }    
