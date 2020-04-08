@@ -1,5 +1,4 @@
 {
-  "homepage": "http://azbardini.github.io/omnistack_11/frontend",
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
@@ -10,6 +9,8 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.0.0",
     "gh-pages": "^2.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
