@@ -27,7 +27,6 @@ function saveCharges(charges) {
     const mongoObj = convertObjToMongo(charges);
     return new Promise((resolve, reject) => {
         ChargesModel.create(mongoObj).then(response => {
-            console.log(response);
             return resolve(response);
         }).catch(err => {
             console.log(err);
@@ -41,11 +40,15 @@ function convertObjToMongo(bodyObj){
         tabs: [],
         charges: []
     };
-    for (let [k, v] of Object.entries(bodyObj.tabNames)) {
-        mongoObj.tabs.push({k, v})
+    if(bodyObj.tabNames){
+        for (let [k, v] of Object.entries(bodyObj.tabNames)) {
+            k && v && mongoObj.tabs.push({k, v})
+        }    
     }
-    for (let [k, v] of Object.entries(bodyObj.charges)) {
-        mongoObj.charges.push({k, v})
+    if(bodyObj.charges){
+        for (let [k, v] of Object.entries(bodyObj.charges)) {
+            k && v && mongoObj.charges.push({k, v})
+        }
     }
     return mongoObj;
 }

@@ -42,15 +42,18 @@ function convertObjToMongo(bodyObj){
         tabs: [],
         summaries: []
     };
-    for (let [k, v] of Object.entries(bodyObj.tabNames)) {
-        mongoObj.tabs.push({k, v})
+    if(bodyObj.tabNames){
+        for (let [k, v] of Object.entries(bodyObj.tabNames)) {
+            k && v && mongoObj.tabs.push({k, v})
+        }
     }
-    for (let [k, v] of Object.entries(bodyObj.summaries)) {
-        mongoObj.summaries.push({k, v})
+    if(bodyObj.summaries){       
+        for (let [k, v] of Object.entries(bodyObj.summaries)) {
+            k && v && mongoObj.summaries.push({k, v})
+        }
+        return mongoObj;
     }
-    return mongoObj;
 }
-
 // tabs: [{
 //     k: String,
 //     v: String
