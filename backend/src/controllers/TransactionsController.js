@@ -1,4 +1,5 @@
 const TransactionsScrapper = require('../scrapper/Transactions');
+const TransactionsModel = require('../models/TransactionsModel');
 let {context} = require('./SessionController');
 
 function index(req, res) {
@@ -11,7 +12,28 @@ function index(req, res) {
 }
 
 function store(req, res) {
-    return res.status(200).json(context.data);
+    console.log('store -> req.body', req.body);
+    const transactionsObj = req && req.body || null;
+    if (!transactionsObj) {        
+        return res.status(400).json({err: 'Problem saving profile'})
+    }
+    saveProfile(transactionsObj).then(() =>{
+        return res.status(200).json();
+    }).catch(err => {
+        return res.status(400).json({err: 'Problem saving profile'})
+    });
+}
+
+function saveProfile(transactionsObj) {
+    return new Promise((resolve, reject) => {
+        TransactionsModel.create(transactionsObj).then(response => {
+            console.log(response);
+            return resolve(response);
+        }).catch(err => {
+            console.log(err);
+            return reject(err);
+        });
+    });
 }
 
 module.exports = {
