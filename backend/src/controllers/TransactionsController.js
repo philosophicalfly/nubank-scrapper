@@ -10,6 +10,11 @@ function index(req, res) {
     });
 }
 
+function store(req, res) {
+    return res.status(200).json(context.data);
+}
+
 module.exports = {
-    index
+    index,
+    store
 }
