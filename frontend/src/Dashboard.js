@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {useHistory} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CachedIcon from '@material-ui/icons/Cached';
@@ -40,15 +40,15 @@ export default function Dashboard() {
   }, []);
 
   async function showProfile(refetch) {
-    if(!profile|| refetch){
-    setDataToShow('loading');
-    setProfile(false)
+    if (!profile || refetch) {
+      setDataToShow('loading');
+      setProfile(false)
       try {
         await api.get('profile').then(response => {
-            if (response && response.data) {
-                setProfile(response.data)
-            }
-        })    
+          if (response && response.data) {
+            setProfile(response.data)
+          }
+        })
       } catch (e) {
         alert("Error, try again later...");
       }
@@ -58,15 +58,15 @@ export default function Dashboard() {
 
   async function saveProfile() {
     setSaveButton(false);
-    if(!profile){
+    if (!profile) {
       alert("Error, try again later...");
-    }else{
+    } else {
       try {
         await api.post('profile', profile).then(response => {
-            if (response) {
-              alert("Saved profile to MongoDB");
-            }
-        })    
+          if (response) {
+            alert("Saved profile to MongoDB");
+          }
+        })
       } catch (e) {
         alert("Error, try again later...");
       }
@@ -75,15 +75,15 @@ export default function Dashboard() {
   }
 
   async function showTransactions(refetch) {
-    if(!transactions|| refetch){
-    setDataToShow('loading');
-    setTransactions(false)
+    if (!transactions || refetch) {
+      setDataToShow('loading');
+      setTransactions(false)
       try {
         await api.get('transactions').then(response => {
-            if (response && response.data) {
-                setTransactions(response.data)
-            }
-        });    
+          if (response && response.data) {
+            setTransactions(response.data)
+          }
+        });
       } catch (e) {
         alert("Error, try again later...");
       }
@@ -93,17 +93,17 @@ export default function Dashboard() {
 
   async function saveTransactions() {
     setSaveButton(false);
-    if(!transactions){
-      alert("Error, tryadasdfasdfasdfasdf again later...");
-    }else{
+    if (!transactions) {
+      alert("Error, try again later...");
+    } else {
       try {
         await api.post('transactions', transactions).then(response => {
-            if (response) {
-              alert("Saved transactions to MongoDB");
-            }
-        })    
+          if (response) {
+            alert("Saved transactions to MongoDB");
+          }
+        })
       } catch (e) {
-        alert("Error, try agaiqqqqqqqqqn later...");
+        alert("Error, try again later...");
       }
       setSaveButton(true);
     }
@@ -111,16 +111,16 @@ export default function Dashboard() {
 
 
   async function showCharges(refetch) {
-    if(!charges || refetch){
-    setDataToShow('loading');
-    setTabNames(false);
-    setCharges(false);
+    if (!charges || refetch) {
+      setDataToShow('loading');
+      setTabNames(false);
+      setCharges(false);
       try {
         await api.get('charges').then(response => {
-            if (response && response.data && response.data.tabNames && response.data.charges) {
-                setTabNames(response.data.tabNames)
-                setCharges(response.data.charges)
-            }
+          if (response && response.data && response.data.tabNames && response.data.charges) {
+            setTabNames(response.data.tabNames)
+            setCharges(response.data.charges)
+          }
         });
       } catch (e) {
         alert("Error, try again later...");
@@ -131,15 +131,15 @@ export default function Dashboard() {
 
   async function saveCharges() {
     setSaveButton(false);
-    if(!charges){
+    if (!charges) {
       alert("Error, try again later...");
-    }else{
+    } else {
       try {
-        await api.post('charges', {tabNames, charges}).then(response => {
-            if (response) {
-              alert("Saved charges to MongoDB");
-            }
-        })    
+        await api.post('charges', { tabNames, charges }).then(response => {
+          if (response) {
+            alert("Saved charges to MongoDB");
+          }
+        })
       } catch (e) {
         alert("Error, try again later...");
       }
@@ -148,17 +148,17 @@ export default function Dashboard() {
   }
 
   async function showSummaries(refetch) {
-    if(!summaries || refetch){
-    setDataToShow('loading');
-    setTabNames(false);
-    setSummaries(false);
+    if (!summaries || refetch) {
+      setDataToShow('loading');
+      setTabNames(false);
+      setSummaries(false);
       try {
         await api.get('summaries').then(response => {
-            if (response && response.data && response.data.tabNames && response.data.summaries) {
-                setTabNames(response.data.tabNames)
-                setSummaries(response.data.summaries)
-                console.log(response.data)
-            }
+          if (response && response.data && response.data.tabNames && response.data.summaries) {
+            setTabNames(response.data.tabNames)
+            setSummaries(response.data.summaries)
+            console.log(response.data)
+          }
         });
       } catch (e) {
         alert("Error, try again later...");
@@ -169,15 +169,15 @@ export default function Dashboard() {
 
   async function saveSummaries() {
     setSaveButton(false);
-    if(!summaries){
+    if (!summaries) {
       alert("Error, try again later...");
-    }else{
+    } else {
       try {
-        await api.post('summaries', {tabNames, summaries}).then(response => {
-            if (response) {
-              alert("Saved summaries to MongoDB");
-            }
-        })    
+        await api.post('summaries', { tabNames, summaries }).then(response => {
+          if (response) {
+            alert("Saved summaries to MongoDB");
+          }
+        })
       } catch (e) {
         alert("Error, try again later...");
       }
@@ -188,85 +188,85 @@ export default function Dashboard() {
 
   async function logout() {
     try {
-        const response = await api.post('logout');
-        if (response && response.data && response.data.login === false) {
-          history.push('/');
-        }
-      } catch (e) {
-        alert("Error, try again later...");
+      const response = await api.post('logout');
+      if (response && response.data && response.data.login === false) {
         history.push('/');
       }
-      return 0
-   }
+    } catch (e) {
+      alert("Error, try again later...");
+      history.push('/');
+    }
+    return 0
+  }
 
   return (<React.Fragment>
-    <CssBaseline/>
+    <CssBaseline />
     <div className={classes.root}>
       <AppBar position="relative" className={classes.header}>
         <Toolbar className={classes.toolbar}>
           <Typography component="h3" variant="h4" align="left" color="white">
-              Nubank Scrapper
+            Nubank Scrapper
           </Typography>
           <Button className={classes.transparentButton} onClick={() => logout()}>
-            <ExitToAppIcon className={classes.icon}/>
+            <ExitToAppIcon className={classes.icon} />
           </Button>
         </Toolbar>
       </AppBar>
 
       <main>
         <div className={classes.title}>
-        <Container maxWidth="md">
-          <Typography component="h3" variant="h4" align="center" color="textPrimary">{profile.name}</Typography>
-        </Container>
-        <Container className={classes.cardGrid} maxWidth="md">
-          <Grid container spacing={2} justify="center">
-            <Grid item><Button variant="contained" color="primary" onClick={() => showProfile()}>Show Profile</Button></Grid>
-            <Grid item><Button variant="contained" color="primary" onClick={() => showSummaries()}>Show Summaries</Button></Grid>
-            <Grid item><Button variant="contained" color="primary" onClick={() => showTransactions()}>Show Transactions</Button></Grid>
-            <Grid item><Button variant="contained" color="primary" onClick={() => showCharges()}>Show Charges</Button></Grid>
-          </Grid>
-        </Container>
+          <Container maxWidth="md">
+            <Typography component="h3" variant="h4" align="center" color="textPrimary">{profile.name}</Typography>
+          </Container>
+          <Container className={classes.cardGrid} maxWidth="md">
+            <Grid container spacing={2} justify="center">
+              <Grid item><Button variant="contained" color="primary" onClick={() => showProfile()}>Show Profile</Button></Grid>
+              <Grid item><Button variant="contained" color="primary" onClick={() => showSummaries()}>Show Summaries</Button></Grid>
+              <Grid item><Button variant="contained" color="primary" onClick={() => showTransactions()}>Show Transactions</Button></Grid>
+              <Grid item><Button variant="contained" color="primary" onClick={() => showCharges()}>Show Charges</Button></Grid>
+            </Grid>
+          </Container>
         </div>
 
         {dataToShow === 'loading' && (
-        <Container className={classes.loadingContainer} maxWidth="md">
-        <img className={classes.loading} src={loading} alt="loading"></img>
-        </Container>
+          <Container className={classes.loadingContainer} maxWidth="md">
+            <img className={classes.loading} src={loading} alt="loading"></img>
+          </Container>
         )}
 
         {profile && dataToShow === 'profile' && (
-        <Container className={classes.cardGrid} maxWidth="md">
-        <Grid container spacing={2} justify="space-between">
-            <Grid item><Typography component="h4" variant="h4">Profile</Typography></Grid>
-            <Grid item>
-            {saveButton && (<Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => saveProfile()}><SaveIcon className={classes.icon}/></Button>)}
-            <Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => showProfile(true)}><CachedIcon className={classes.icon}/></Button>
+          <Container className={classes.cardGrid} maxWidth="md">
+            <Grid container spacing={2} justify="space-between">
+              <Grid item><Typography component="h4" variant="h4">Profile</Typography></Grid>
+              <Grid item>
+                {saveButton && (<Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => saveProfile()}><SaveIcon className={classes.icon} /></Button>)}
+                <Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => showProfile(true)}><CachedIcon className={classes.icon} /></Button>
+              </Grid>
             </Grid>
-        </Grid>
-          <Typography color="textSecondary">Email: {profile.email}</Typography>
-          <Typography color="textSecondary">Phone: {profile.phone}</Typography>
-          <Typography color="textSecondary">Card Number: {profile.number}</Typography>
-          <Typography color="textSecondary">Used Credit: {profile.usedCredit || 'R$0,00'}</Typography>
-          <Typography color="textSecondary">Available Credit: {profile.availableCredit}</Typography>
-          <Typography color="textSecondary">Total Credit: {profile.totalCredit}</Typography>
-          <Typography color="textSecondary">Due Day: {profile.dueDay}</Typography>
-        </Container>
+            <Typography color="textSecondary">Email: {profile.email}</Typography>
+            <Typography color="textSecondary">Phone: {profile.phone}</Typography>
+            <Typography color="textSecondary">Card Number: {profile.number}</Typography>
+            <Typography color="textSecondary">Used Credit: {profile.usedCredit || 'R$0,00'}</Typography>
+            <Typography color="textSecondary">Available Credit: {profile.availableCredit}</Typography>
+            <Typography color="textSecondary">Total Credit: {profile.totalCredit}</Typography>
+            <Typography color="textSecondary">Due Day: {profile.dueDay}</Typography>
+          </Container>
         )}
 
         {transactions && dataToShow === 'transactions' && (
-        <Container className={classes.cardGrid} maxWidth="md">
-        <Grid container spacing={2} justify="space-between">
-            <Grid item><Typography component="h4" variant="h4">Transactions</Typography></Grid>
-            <Grid item>
-            {saveButton && (<Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => saveTransactions()}><SaveIcon className={classes.icon}/></Button>)}
-            <Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => showTransactions(true)}><CachedIcon className={classes.icon}/></Button>
+          <Container className={classes.cardGrid} maxWidth="md">
+            <Grid container spacing={2} justify="space-between">
+              <Grid item><Typography component="h4" variant="h4">Transactions</Typography></Grid>
+              <Grid item>
+                {saveButton && (<Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => saveTransactions()}><SaveIcon className={classes.icon} /></Button>)}
+                <Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => showTransactions(true)}><CachedIcon className={classes.icon} /></Button>
+              </Grid>
             </Grid>
-        </Grid>
-        <Typography component="h5" variant="h5">Total Purchases: {transactions.purchases}</Typography>
-        <Typography component="h5" variant="h5">Total Expenses: R${transactions.expenses}</Typography>
-        <br/>
-          <Grid container="container" spacing={4}>
-            <Table size="small">
+            <Typography component="h5" variant="h5">Total Purchases: {transactions.purchases}</Typography>
+            <Typography component="h5" variant="h5">Total Expenses: R${transactions.expenses}</Typography>
+            <br />
+            <Grid container="container" spacing={4}>
+              <Table size="small">
                 <TableHead>
                   <TableRow>
                     <TableCell>Title</TableCell>
@@ -285,78 +285,78 @@ export default function Dashboard() {
                     </TableRow>
                   ))}
                 </TableBody>
-            </Table>
-          </Grid>
-        </Container>
+              </Table>
+            </Grid>
+          </Container>
         )}
 
         {charges && dataToShow === 'charges' && (
-        <Container className={classes.cardGrid} maxWidth="md">
-        <Grid container spacing={2} justify="space-between">
-            <Grid item><Typography component="h4" variant="h4">Charges</Typography></Grid>
-            <Grid item>
-            {saveButton && (<Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => saveCharges()}><SaveIcon className={classes.icon}/></Button>)}
-            <Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => showCharges(true)}><CachedIcon className={classes.icon}/></Button>
+          <Container className={classes.cardGrid} maxWidth="md">
+            <Grid container spacing={2} justify="space-between">
+              <Grid item><Typography component="h4" variant="h4">Charges</Typography></Grid>
+              <Grid item>
+                {saveButton && (<Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => saveCharges()}><SaveIcon className={classes.icon} /></Button>)}
+                <Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => showCharges(true)}><CachedIcon className={classes.icon} /></Button>
+              </Grid>
             </Grid>
-        </Grid>
-         {Object.entries(tabNames).map(([v, value]) => (
-          <Grid container="container" spacing={4} key={v}>
-            <Typography className={classes.cardGrid} component="h5" variant="h5">{value}</Typography>
-            <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>Amount</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {charges && charges[v] && Object.entries(charges[v]).map(([c, charge]) => (
-                    <TableRow key={c}>
-                      <TableCell>{charge.date}</TableCell>
-                      <TableCell>{charge.description}</TableCell>
-                      <TableCell>{charge.amount}</TableCell>
+            {Object.entries(tabNames).map(([v, value]) => (
+              <Grid container="container" spacing={4} key={v}>
+                <Typography className={classes.cardGrid} component="h5" variant="h5">{value}</Typography>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Date</TableCell>
+                      <TableCell>Description</TableCell>
+                      <TableCell>Amount</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-            </Table>
-          </Grid>
-        ))}
-        </Container>
+                  </TableHead>
+                  <TableBody>
+                    {charges && charges[v] && Object.entries(charges[v]).map(([c, charge]) => (
+                      <TableRow key={c}>
+                        <TableCell>{charge.date}</TableCell>
+                        <TableCell>{charge.description}</TableCell>
+                        <TableCell>{charge.amount}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Grid>
+            ))}
+          </Container>
         )}
 
 
         {summaries && dataToShow === 'summaries' && (
-        <Container className={classes.cardGrid} maxWidth="md">
-        <Grid container spacing={2} justify="space-between">
-            <Grid item><Typography component="h4" variant="h4">Summaries</Typography></Grid>
-            <Grid item>
-            {saveButton && (<Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => saveSummaries()}><SaveIcon className={classes.icon}/></Button>)}
-            <Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => showSummaries(true)}><CachedIcon className={classes.icon}/></Button>
+          <Container className={classes.cardGrid} maxWidth="md">
+            <Grid container spacing={2} justify="space-between">
+              <Grid item><Typography component="h4" variant="h4">Summaries</Typography></Grid>
+              <Grid item>
+                {saveButton && (<Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => saveSummaries()}><SaveIcon className={classes.icon} /></Button>)}
+                <Button className={classes.spaceLeft} variant="contained" color="primary" onClick={() => showSummaries(true)}><CachedIcon className={classes.icon} /></Button>
+              </Grid>
             </Grid>
-        </Grid>
-         {Object.entries(tabNames).map(([v, value]) => (
-          <Grid container="container" spacing={4} key={v}>
-            <Typography className={classes.cardGrid} component="h5" variant="h5">{value}</Typography>
-            <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Due Date</TableCell>
-                    <TableCell>Amount</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {summaries && summaries[v] && 
+            {Object.entries(tabNames).map(([v, value]) => (
+              <Grid container="container" spacing={4} key={v}>
+                <Typography className={classes.cardGrid} component="h5" variant="h5">{value}</Typography>
+                <Table size="small">
+                  <TableHead>
                     <TableRow>
-                      <TableCell>{summaries[v].dueDate}</TableCell>
-                      <TableCell>{summaries[v].amount}</TableCell>
-                    </TableRow>                      
-                  }
-                </TableBody>
-            </Table>
-          </Grid>
-        ))}
-        </Container>
+                      <TableCell>Due Date</TableCell>
+                      <TableCell>Amount</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {summaries && summaries[v] &&
+                      <TableRow>
+                        <TableCell>{summaries[v].dueDate}</TableCell>
+                        <TableCell>{summaries[v].amount}</TableCell>
+                      </TableRow>
+                    }
+                  </TableBody>
+                </Table>
+              </Grid>
+            ))}
+          </Container>
         )}
 
       </main>
@@ -370,6 +370,6 @@ export default function Dashboard() {
         </Typography>
       </footer>
     </div>
-    </React.Fragment>
-    );
+  </React.Fragment>
+  );
 }

@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import crypto from 'crypto';
 
 import {
@@ -11,7 +11,7 @@ import {
   Typography
 } from '@material-ui/core';
 
-import useStyles from './style/LoginStyles'
+import useStyles from './style/UserLoginStyles';
 import loading from './img/general/loading.gif';
 
 import api from './services/Api'
@@ -29,13 +29,13 @@ export default function SignInSide() {
   async function getQrCode(event) {
     event.preventDefault();
 
-    function encrypt(text){
-      var cipher = crypto.createCipher('aes-256-cbc','nu5cr4pp3r')
-      var crypted = cipher.update(text,'utf8','hex')
+    function encrypt(text) {
+      const cipher = crypto.createCipher('aes-256-cbc', 'nu5cr4pp3r');
+      let crypted = cipher.update(text, 'utf8', 'hex');
       crypted += cipher.final('hex');
       return crypted;
     }
-    
+
     const data = {
       login: encrypt(cpf),
       passwd: encrypt(passwd)
@@ -68,17 +68,17 @@ export default function SignInSide() {
   }
 
   return (<Grid container="container" component="main" className={classes.root}>
-    <CssBaseline/>
-    <Grid item="item" xs={false} sm={4} md={7} className={classes.image}/>
+    <CssBaseline />
+    <Grid item="item" xs={false} sm={4} md={7} className={classes.image} />
     <Grid item="item" xs={12} sm={8} md={5} component={Paper} elevation={6} square="square">
       <div className={classes.paper}>
         <Typography component="h1" variant="h1">
           Nubank Scrapper
         </Typography>
         <form className={classes.form} noValidate="noValidate" onSubmit={getQrCode}>
-        <TextField variant="outlined" margin="normal" required="required" fullWidth="fullWidth" id="cpf" label="CPF" name="cpf" autoFocus="autoFocus" value={cpf} onChange={event => setCpf(event.target.value)}/>
-        <TextField variant="outlined" margin="normal" required="required" fullWidth="fullWidth" id="passwd" label="Password" name="passwd" type="password" value={passwd} onChange={event => setPasswd(event.target.value)}/>
-        {qrCodeState === 'unset' && (<Button className={classes.primaryButton} variant="contained" type="submit" fullWidth="fullWidth">
+          <TextField variant="outlined" margin="normal" required="required" fullWidth="fullWidth" id="cpf" label="CPF" name="cpf" autoFocus="autoFocus" value={cpf} onChange={event => setCpf(event.target.value)} />
+          <TextField variant="outlined" margin="normal" required="required" fullWidth="fullWidth" id="passwd" label="Password" name="passwd" type="password" value={passwd} onChange={event => setPasswd(event.target.value)} />
+          {qrCodeState === 'unset' && (<Button className={classes.primaryButton} variant="contained" type="submit" fullWidth="fullWidth">
             Sign In
           </Button>
           )}

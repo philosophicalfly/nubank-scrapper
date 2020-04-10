@@ -1,8 +1,8 @@
 const AuthenticationScrapper = require('../scrapper/Authentication');
-const {decrypt} = require('../scrapper/Utils')
-let {context} = require('./SessionController');
+const { decrypt } = require('../scrapper/Utils');
+let { context } = require('./SessionController');
 
-async function getQrCode(req, res) {
+async function getQrCode (req, res) {
     const body = req.body;
     context.login = await decrypt(body.login);
     context.passwd = await decrypt(body.passwd);
@@ -10,26 +10,26 @@ async function getQrCode(req, res) {
     AuthenticationScrapper.getQrCode(context).then(response => {
         context = response;
         return res.json(context.data);
-    }).catch(err => {
-        return res.status(400).json({err: 'Problem getting QR'})
+    }).catch(() => {
+        return res.status(400).json({ err: 'Problem getting QR' });
     });
 }
 
-function watchLogin(req, res) {
+function watchLogin (req, res) {
     AuthenticationScrapper.watchLogin(context).then(response => {
         context = response;
         return res.json(context.data);
-    }).catch(err => {
-        return res.status(400).json({err: 'Problem in login'})
+    }).catch(() => {
+        return res.status(400).json({ err: 'Problem in login' });
     });
 }
 
-function logout(req, res) {
+function logout (req, res) {
     AuthenticationScrapper.logout(context).then(response => {
         context = response;
         return res.json(context.data);
-    }).catch(err => {
-        return res.status(400).json({err: 'Problem in logout'})
+    }).catch(() => {
+        return res.status(400).json({ err: 'Problem in logout' });
     });
 }
 
@@ -37,4 +37,4 @@ module.exports = {
     getQrCode,
     watchLogin,
     logout
-}
+};
