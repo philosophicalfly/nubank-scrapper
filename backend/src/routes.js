@@ -10,9 +10,15 @@ const TransactionsController = require('./controllers/TransactionsController');
 routes.post('/getQrCode', AuthenticationController.getQrCode);
 routes.post('/watchLogin', AuthenticationController.watchLogin);
 routes.post('/logout', AuthenticationController.logout);
+
 routes.get('/profile', ProfileController.index);
 routes.get('/summaries', SummariesController.index);
 routes.get('/charges', ChargesController.index);
 routes.get('/transactions', TransactionsController.index);
+
+routes.post('/profile', ProfileController.store);
+routes.post('/summaries', SummariesController.store);
+routes.post('/charges', ChargesController.store);
+routes.post('/transactions', TransactionsController.store);
 
 module.exports = routes;

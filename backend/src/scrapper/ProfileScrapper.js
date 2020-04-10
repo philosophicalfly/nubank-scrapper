@@ -1,13 +1,11 @@
-const puppeteer = require('puppeteer');
-const {getPage} = require('./Utils');
+const { getPage } = require('./Utils');
 
-
-async function getProfile(context){
-    page = context.page || await getPage(context);
-    await page.goto('https://app.nubank.com.br/#/profile', { waitUntil: 'networkidle0' })
+async function getProfile (context) {
+    const page = context.page || await getPage(context);
+    await page.goto('https://app.nubank.com.br/#/profile', { waitUntil: 'networkidle0' });
     await page.waitForSelector('.card');
     const profile = await page.evaluate(() => {
-        const name = document.querySelector('.card .name') ? document.querySelector('.card .name').innerText : ''
+        const name = document.querySelector('.card .name') ? document.querySelector('.card .name').innerText : '';
         const email = document.querySelector('#email') ? document.querySelector('#email').value : '';
         const phone = document.querySelector('#phone') ? document.querySelector('#phone').value : '';
         const number = document.querySelector('.card .number') ? document.querySelector('.card .number').innerText : '';
@@ -28,12 +26,11 @@ async function getProfile(context){
         };
         return retObj;
     });
-    // console.log('getProfile -> profile', profile);
-    context.data = profile
-    context.page = page
+    context.data = profile;
+    context.page = page;
     return context;
 }
 
 module.exports = {
     getProfile
-}
+};
