@@ -1,9 +1,14 @@
 /* eslint-disable no-mixed-operators */
 const ProfileScrapper = require('../scrapper/ProfileScrapper');
 const { saveProfile } = require('../modules/ProfileModule');
+const { getPermissions } = require('../modules/CommonModule');
 let { context } = require('./SessionController');
 
-function index (req, res) {
+async function index (req, res) {
+    const userHasPermissions = await getPermissions(req);
+    if (!userHasPermissions) {
+        return res.status(401).json({ err: 'Unauthorized' });
+    };
     ProfileScrapper.getProfile(context).then(response => {
         context = response;
         return res.json(context.data);
@@ -12,7 +17,11 @@ function index (req, res) {
     });
 }
 
-function store (req, res) {
+async function store (req, res) {
+    const userHasPermissions = await getPermissions(req);
+    if (!userHasPermissions) {
+        return res.status(401).json({ err: 'Unauthorized' });
+    };
     const profileObj = req && req.body || null;
     if (!profileObj) {
         return res.status(400).json({ err: 'Problem saving profile' });

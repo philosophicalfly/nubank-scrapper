@@ -6,7 +6,6 @@ async function getQrCode (req, res) {
     const body = req.body;
     context.login = await decrypt(body.login);
     context.passwd = await decrypt(body.passwd);
-
     AuthenticationScrapper.getQrCode(context).then(response => {
         context = response;
         return res.json(context.data);
@@ -20,6 +19,8 @@ function watchLogin (req, res) {
         context = response;
         return res.json(context.data);
     }).catch(() => {
+        context.login = false;
+        context.passwd = false;
         return res.status(400).json({ err: 'Problem in login' });
     });
 }
@@ -27,6 +28,8 @@ function watchLogin (req, res) {
 function logout (req, res) {
     AuthenticationScrapper.logout(context).then(response => {
         context = response;
+        context.login = false;
+        context.passwd = false;
         return res.json(context.data);
     }).catch(() => {
         return res.status(400).json({ err: 'Problem in logout' });

@@ -3,7 +3,9 @@ let context = {
     page: false,
     browser: false,
     logged: false,
-    data: false
+    data: false,
+    login: false,
+    passwd: false
 };
 
 module.exports = {

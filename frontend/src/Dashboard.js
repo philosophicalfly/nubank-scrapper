@@ -34,6 +34,9 @@ export default function Dashboard() {
   const [charges, setCharges] = useState(false);
   const [summaries, setSummaries] = useState(false);
   const [saveButton, setSaveButton] = useState(true);
+  const [login, setLogin] = useState(localStorage.getItem('login'));
+  const [passwd, setPasswd] = useState(localStorage.getItem('passwd'));
+
 
   useEffect(() => {
     showProfile();
@@ -44,7 +47,12 @@ export default function Dashboard() {
       setDataToShow('loading');
       setProfile(false)
       try {
-        await api.get('profile').then(response => {
+        await api.get('profile', {
+          headers: {
+            login,
+            passwd
+          }
+        }).then(response => {
           if (response && response.data) {
             setProfile(response.data)
           }
@@ -62,7 +70,12 @@ export default function Dashboard() {
       alert("Error, try again later...");
     } else {
       try {
-        await api.post('profile', profile).then(response => {
+        await api.post('profile', profile, {
+          headers: {
+            login,
+            passwd
+          }
+        }).then(response => {
           if (response) {
             alert("Saved profile to MongoDB");
           }
@@ -79,7 +92,12 @@ export default function Dashboard() {
       setDataToShow('loading');
       setTransactions(false)
       try {
-        await api.get('transactions').then(response => {
+        await api.get('transactions', {
+          headers: {
+            login,
+            passwd
+          }
+        }).then(response => {
           if (response && response.data) {
             setTransactions(response.data)
           }
@@ -97,7 +115,12 @@ export default function Dashboard() {
       alert("Error, try again later...");
     } else {
       try {
-        await api.post('transactions', transactions).then(response => {
+        await api.post('transactions', transactions, {
+          headers: {
+            login,
+            passwd
+          }
+        }).then(response => {
           if (response) {
             alert("Saved transactions to MongoDB");
           }
@@ -116,7 +139,12 @@ export default function Dashboard() {
       setTabNames(false);
       setCharges(false);
       try {
-        await api.get('charges').then(response => {
+        await api.get('charges', {
+          headers: {
+            login,
+            passwd
+          }
+        }).then(response => {
           if (response && response.data && response.data.tabNames && response.data.charges) {
             setTabNames(response.data.tabNames)
             setCharges(response.data.charges)
@@ -135,7 +163,12 @@ export default function Dashboard() {
       alert("Error, try again later...");
     } else {
       try {
-        await api.post('charges', { tabNames, charges }).then(response => {
+        await api.post('charges', { tabNames, charges }, {
+          headers: {
+            login,
+            passwd
+          }
+        }).then(response => {
           if (response) {
             alert("Saved charges to MongoDB");
           }
@@ -153,11 +186,15 @@ export default function Dashboard() {
       setTabNames(false);
       setSummaries(false);
       try {
-        await api.get('summaries').then(response => {
+        await api.get('summaries', {
+          headers: {
+            login,
+            passwd
+          }
+        }).then(response => {
           if (response && response.data && response.data.tabNames && response.data.summaries) {
             setTabNames(response.data.tabNames)
             setSummaries(response.data.summaries)
-            console.log(response.data)
           }
         });
       } catch (e) {
@@ -173,7 +210,12 @@ export default function Dashboard() {
       alert("Error, try again later...");
     } else {
       try {
-        await api.post('summaries', { tabNames, summaries }).then(response => {
+        await api.post('summaries', { tabNames, summaries }, {
+          headers: {
+            login,
+            passwd
+          }
+        }).then(response => {
           if (response) {
             alert("Saved summaries to MongoDB");
           }
@@ -188,7 +230,12 @@ export default function Dashboard() {
 
   async function logout() {
     try {
-      const response = await api.post('logout');
+      const response = await api.post('logout', {
+        headers: {
+          login,
+          passwd
+        }
+      });
       if (response && response.data && response.data.login === false) {
         history.push('/');
       }

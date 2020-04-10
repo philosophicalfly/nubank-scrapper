@@ -26,15 +26,15 @@ export default function SignInSide() {
 
   const history = useHistory();
 
+  function encrypt(text) {
+    const cipher = crypto.createCipher('aes-256-cbc', 'nu5cr4pp3r');
+    let crypted = cipher.update(text, 'utf8', 'hex');
+    crypted += cipher.final('hex');
+    return crypted;
+  }
+
   async function getQrCode(event) {
     event.preventDefault();
-
-    function encrypt(text) {
-      const cipher = crypto.createCipher('aes-256-cbc', 'nu5cr4pp3r');
-      let crypted = cipher.update(text, 'utf8', 'hex');
-      crypted += cipher.final('hex');
-      return crypted;
-    }
 
     const data = {
       login: encrypt(cpf),
@@ -59,6 +59,8 @@ export default function SignInSide() {
       setQrCodeState('waiting');
       const response = await api.post('watchLogin');
       if (response && response.data && response.data.login) {
+        localStorage.setItem('login', encrypt(cpf));
+        localStorage.setItem('passwd', encrypt(passwd));
         history.push('/dashboard');
       }
     } catch (e) {
