@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-operators */
 const TransactionsScrapper = require('../scrapper/Transactions');
-const TransactionsModel = require('../models/TransactionsModel');
+const { saveTransactions } = require('../modules/TransactionsModule');
 let { context } = require('./SessionController');
 
 function index (req, res) {
@@ -17,21 +17,10 @@ function store (req, res) {
     if (!transactionsObj) {
         return res.status(400).json({ err: 'Problem saving profile' });
     }
-    saveProfile(transactionsObj).then(() => {
+    saveTransactions(transactionsObj).then(() => {
         return res.status(200).json();
     }).catch(() => {
         return res.status(400).json({ err: 'Problem saving profile' });
-    });
-}
-
-function saveProfile (transactionsObj) {
-    return new Promise((resolve, reject) => {
-        TransactionsModel.create(transactionsObj).then(response => {
-            return resolve(response);
-        }).catch(err => {
-            console.log(err);
-            return reject(err);
-        });
     });
 }
 

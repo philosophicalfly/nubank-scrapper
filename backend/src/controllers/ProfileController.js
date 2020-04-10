@@ -1,7 +1,6 @@
 /* eslint-disable no-mixed-operators */
 const ProfileScrapper = require('../scrapper/Profile');
-const ProfileModel = require('../models/ProfileModel');
-
+const { saveProfile } = require('../modules/ProfileModule');
 let { context } = require('./SessionController');
 
 function index (req, res) {
@@ -22,17 +21,6 @@ function store (req, res) {
         return res.status(200).json();
     }).catch(() => {
         return res.status(400).json({ err: 'Problem saving profile' });
-    });
-}
-
-function saveProfile (profileObj) {
-    return new Promise((resolve, reject) => {
-        ProfileModel.create(profileObj).then(response => {
-            return resolve(response);
-        }).catch(err => {
-            console.log(err);
-            return reject(err);
-        });
     });
 }
 
