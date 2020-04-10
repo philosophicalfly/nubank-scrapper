@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-operators */
-const SummariesScrapper = require('../scrapper/Summaries');
+const SummariesScrapper = require('../scrapper/SummariesScrapper');
 const { saveSummaries } = require('../modules/SummariesModule');
 
 let { context } = require('./SessionController');

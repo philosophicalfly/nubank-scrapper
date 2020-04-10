@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-operators */
-const TransactionsScrapper = require('../scrapper/Transactions');
+const TransactionsScrapper = require('../scrapper/TransactionsScrapper');
 const { saveTransactions } = require('../modules/TransactionsModule');
 let { context } = require('./SessionController');
 

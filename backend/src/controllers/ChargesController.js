@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-operators */
-const ChargesScrapper = require('../scrapper/Charges');
+const ChargesScrapper = require('../scrapper/ChargesScrapper');
 const { saveCharges } = require('../modules/ChargesModule.js');
 let { context } = require('./SessionController');
 

@@ -1,4 +1,4 @@
-const AuthenticationScrapper = require('../scrapper/Authentication');
+const AuthenticationScrapper = require('../scrapper/AuthenticationScrapper');
 const { decrypt } = require('../scrapper/Utils');
 let { context } = require('./SessionController');
 

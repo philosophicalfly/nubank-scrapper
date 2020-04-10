@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-operators */
-const ProfileScrapper = require('../scrapper/Profile');
+const ProfileScrapper = require('../scrapper/ProfileScrapper');
 const { saveProfile } = require('../modules/ProfileModule');
 let { context } = require('./SessionController');
 
