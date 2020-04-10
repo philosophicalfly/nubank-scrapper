@@ -1,34 +1,34 @@
+/* eslint-disable no-mixed-operators */
 const SummariesScrapper = require('../scrapper/Summaries');
 const SummariesModel = require('../models/SummariesModel');
 
-let {context} = require('./SessionController');
+let { context } = require('./SessionController');
 
-function index(req, res) {
+function index (req, res) {
     SummariesScrapper.getSummaries(context).then(response => {
         context = response;
         return res.json(context.data);
-    }).catch(err => {
-        return res.status(400).json({err: 'Problem in getting summaries'})
+    }).catch(() => {
+        return res.status(400).json({ err: 'Problem in getting summaries' });
     });
 }
 
-function store(req, res) {
+function store (req, res) {
     const summariesObj = req && req.body || null;
-    if (!summariesObj) {        
-        return res.status(400).json({err: 'Problem saving summaries'})
+    if (!summariesObj) {
+        return res.status(400).json({ err: 'Problem saving summaries' });
     }
-    saveSummaries(summariesObj).then(() =>{
+    saveSummaries(summariesObj).then(() => {
         return res.status(200).json();
-    }).catch(err => {
-        return res.status(400).json({err: 'Problem saving summaries'})
+    }).catch(() => {
+        return res.status(400).json({ err: 'Problem saving summaries' });
     });
 }
 
-function saveSummaries(summariesObj) {
+function saveSummaries (summariesObj) {
     const mongoObj = convertObjToMongo(summariesObj);
     return new Promise((resolve, reject) => {
         SummariesModel.create(mongoObj).then(response => {
-            console.log(response);
             return resolve(response);
         }).catch(err => {
             console.log(err);
@@ -37,36 +37,25 @@ function saveSummaries(summariesObj) {
     });
 }
 
-function convertObjToMongo(bodyObj){
+function convertObjToMongo (bodyObj) {
     const mongoObj = {
         tabs: [],
         summaries: []
     };
-    if(bodyObj.tabNames){
-        for (let [k, v] of Object.entries(bodyObj.tabNames)) {
-            k && v && mongoObj.tabs.push({k, v})
+    if (bodyObj.tabNames) {
+        for (const [k, v] of Object.entries(bodyObj.tabNames)) {
+            k && v && mongoObj.tabs.push({ k, v });
         }
     }
-    if(bodyObj.summaries){       
-        for (let [k, v] of Object.entries(bodyObj.summaries)) {
-            k && v && mongoObj.summaries.push({k, v})
+    if (bodyObj.summaries) {
+        for (const [k, v] of Object.entries(bodyObj.summaries)) {
+            k && v && mongoObj.summaries.push({ k, v });
         }
         return mongoObj;
     }
 }
-// tabs: [{
-//     k: String,
-//     v: String
-// }],
-// summaries: [{
-//     k: String,
-//     v: {
-//         amount: String,
-//         dueDate: String
-//     }
-// }]
 
 module.exports = {
     index,
     store
-}
+};

@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 let context = {
     page: false,
     browser: false,
@@ -7,4 +8,4 @@ let context = {
 
 module.exports = {
     context
-}
+};

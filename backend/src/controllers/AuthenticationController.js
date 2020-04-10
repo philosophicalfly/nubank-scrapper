@@ -5,9 +5,7 @@ let {context} = require('./SessionController');
 async function getQrCode(req, res) {
     const body = req.body;
     context.login = await decrypt(body.login);
-    console.log('getQrCode -> context.login', context.login);
     context.passwd = await decrypt(body.passwd);
-    console.log('getQrCode -> context.passwd', context.passwd);
 
     AuthenticationScrapper.getQrCode(context).then(response => {
         context = response;
